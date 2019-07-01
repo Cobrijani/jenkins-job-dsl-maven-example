@@ -9,7 +9,7 @@ final BASE_PATH = "pipelines"
 def createBuildJobs(projectConfig, basePath, branchName, goals) {
     new MavenCiBuilder (
         jobName: "${basePath}/${projectConfig.projectName}-build-${branchName}",
-        description: 'Build ${projectConfig.projectName}',
+        description: "Build Project",
         numToKeep: 10,
         daysToKeep: 90,
         scmGitUrl: projectConfig.gitConfig.url,
@@ -24,7 +24,7 @@ def createBuildJobs(projectConfig, basePath, branchName, goals) {
 def createDeployJobs(projectConfig, basePath, branchName){
     new ShellCiBuilder(
         jobName: "${basePath}/${projectConfig.projectName}-deploy-${branchName}",
-        description: 'Deploy ${projectConfig.projectName}',
+        description: "Deploy ${projectConfig.projectName}",
         numToKeep: 10,
         daysToKeep: 90,
         scriptsToRun: ["${WORKSPACE}/src/main/resources/test1.sh"
