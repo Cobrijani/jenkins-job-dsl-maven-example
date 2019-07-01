@@ -25,6 +25,18 @@ class MavenCiBuilder {
                 numToKeep = this.numToKeep
                 daysToKeep = this.daysToKeep
             }
+            wrappers {
+                buildName("${POM_VERSION}-${GIT_COMMIT}")
+                mavenRelease {
+                    releaseGoals('-Dresume=false release:prepare release:perform')
+                    dryRunGoals('-Dresume=false -DdryRun=true release:prepare')
+                    selectCustomScmCommentPrefix()
+                    selectAppendJenkinsUsername()
+                    selectScmCredentials()
+                    numberOfReleaseBuildsToKeep(10)
+                }
+            }
+            
             scm {
                 git {
                     remote {
