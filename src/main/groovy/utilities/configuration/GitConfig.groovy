@@ -8,10 +8,12 @@ class GitConfig {
     
     final URL_PROPERTY_KEY = "url"
     final BRANCHES_TO_BUILD_PROPERTY_KEY = "branches_to_build"
+    final BRANCHES_TO_DEPLOY_PROPERTY_KEY = "branches_to_deploy"
     final CREDENTIAL_KEY_ID_PROPERTY_KEY = "credential_key_id"
     
     def String url
     def branchesToBuild = []
+    def branchesToDeploy = []
     def String credentialKeyId
     
     def void readConfigFromList(gitYamlList) {
@@ -22,6 +24,8 @@ class GitConfig {
                 branchesToBuild = it[BRANCHES_TO_BUILD_PROPERTY_KEY]
             } else if (it[CREDENTIAL_KEY_ID_PROPERTY_KEY]) {
                 credentialKeyId = it[CREDENTIAL_KEY_ID_PROPERTY_KEY]
+            } else if (it[BRANCHES_TO_DEPLOY_PROPERTY_KEY]){
+                branchesToDeploy = it[BRANCHES_TO_DEPLOY_PROPERTY_KEY]
             }
         }
     }

@@ -16,6 +16,7 @@ class MavenCiBuilder {
     String scmGitUrl
     String branchName
     String credentialKeyId
+    String goals
     
     Job build(DslFactory dslFactory) {
         dslFactory.mavenJob(jobName) {
@@ -35,7 +36,7 @@ class MavenCiBuilder {
                 }
             }
             blockOnDownstreamProjects()
-            goals('clean package')
+            goals(this.goals)
         }
     }
 }

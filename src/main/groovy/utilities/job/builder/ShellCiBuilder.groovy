@@ -14,6 +14,9 @@ class ShellCiBuilder {
     Integer numToKeep
     Integer daysToKeep
     List<String> scriptsToRun
+    String scmGitUrl
+    String branchName
+    String credentialKeyId
     
     Job build(DslFactory dslFactory) {
         dslFactory.freeStyleJob(jobName) {
@@ -21,6 +24,16 @@ class ShellCiBuilder {
             logRotator {
                 numToKeep = this.numToKeep
                 daysToKeep = this.daysToKeep
+            }
+            scm {
+                git {
+                    remote {
+                        name('origin')
+                        url(this.scmGitUrl)
+                        credentials(this.credentialKeyId)
+                    }
+                    branch(this.branchName)
+                }
             }
             blockOnDownstreamProjects()
             steps {

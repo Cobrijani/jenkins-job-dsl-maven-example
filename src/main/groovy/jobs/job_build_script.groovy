@@ -4,12 +4,12 @@ import utilities.job.builder.MavenCiBuilder
 import utilities.job.builder.ShellCiBuilder
 
 final YAML_FILE_CONFIG_PATH = "/var/jenkins_home/job_dsl_script/jenkins_swarm.yaml"
-final BASE_PATH = "createdJobs"
+final BASE_PATH = "pipelines"
 
 def createBuildJobs(projectConfig, basePath, branchName) {
     new MavenCiBuilder (
         jobName: "${basePath}/${projectConfig.projectName}-build-${branchName}",
-        description: 'Simple maven build job',
+        description: 'Build ${projectConfig.projectName}',
         numToKeep: 10,
         daysToKeep: 90,
         scmGitUrl: projectConfig.gitConfig.url,
@@ -17,13 +17,20 @@ def createBuildJobs(projectConfig, basePath, branchName) {
         credentialKeyId: projectConfig.gitConfig.credentialKeyId
     ).build(this)
     
+    
+}
+
+def createDeployJobs(projectConfig, basePath, branchName){
     new ShellCiBuilder(
         jobName: "${basePath}/${projectConfig.projectName}-script-${branchName}",
-        description: 'Simple script build job',
+        description: 'Deploy ${projectConfig.projectName}',
         numToKeep: 10,
         daysToKeep: 90,
         scriptsToRun: ["${WORKSPACE}/src/main/resources/test1.sh"
-            , "${WORKSPACE}/src/main/resources/test2.sh"]
+            , "${WORKSPACE}/src/main/resources/test2.sh"],
+        scmGitUrl: projectConfig.gitConfig.url,
+        branchName: branchName,
+        credentialKeyId: projectConfig.gitConfig.credentialKeyId
     ).build(this)
 }
 
@@ -45,6 +52,15 @@ projectConfigList.each { projectConfig ->
             description 'All jobs for the pipeline'
         }
         def buildJobNames = createBuildJobs(
+            projectConfig, branchPath, branchName)
+    }
+
+    projectconfig.gitConfig.branchesToDeploy.each { branchName ->
+        def branchPath = "${projectBasePath}/${branchName}"
+        folder(branchPath) {
+            description 'All jobs for the pipeline'
+        }
+        def buildJobNames = createDeployJobs(
             projectConfig, branchPath, branchName)
     }
 }
