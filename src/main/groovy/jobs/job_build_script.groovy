@@ -51,10 +51,6 @@ projectConfigList.each { projectConfig ->
         
         def branchName = branchDefinition.branchName
         def goals = branchDefinition.goals
-        
-        if (parts.length == 2){
-            goals = parts[1]
-        }
 
         def branchPath = "${projectBasePath}/${branchName}"
         folder(branchPath) {
