@@ -22,6 +22,7 @@ class GitConfig {
                 url = it[URL_PROPERTY_KEY]
             } else if (it[BRANCHES_TO_BUILD_PROPERTY_KEY]) {
                 it[BRANCHES_TO_BUILD_PROPERTY_KEY].each { build ->
+                    println "Branches to build: ${build}"
                     if(build instanceof String){
                         branchesToBuild
                             .add(new BranchBuild(branchName: build,
