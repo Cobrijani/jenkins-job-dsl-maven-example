@@ -26,13 +26,15 @@ class MavenCiBuilder {
                 daysToKeep = this.daysToKeep
             }
             wrappers {
-                mavenRelease {
-                    releaseGoals('-Dresume=false release:prepare release:perform')
-                    dryRunGoals('-Dresume=false -DdryRun=true release:prepare')
-                    selectCustomScmCommentPrefix()
-                    selectAppendJenkinsUsername()
-                    selectScmCredentials()
-                    numberOfReleaseBuildsToKeep(10)
+                if(this.branchName == "master"){
+                    mavenRelease {
+                        releaseGoals('-Dresume=false release:prepare release:perform')
+                        dryRunGoals('-Dresume=false -DdryRun=true release:prepare')
+                        selectCustomScmCommentPrefix()
+                        selectAppendJenkinsUsername()
+                        selectScmCredentials()
+                        numberOfReleaseBuildsToKeep(10)
+                    }
                 }
             }
             
