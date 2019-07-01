@@ -48,10 +48,9 @@ projectConfigList.each { projectConfig ->
         description 'All branch pipelines'
     }
     projectConfig.gitConfig.branchesToBuild.each { branchDefinition ->
-        def parts = branchDefinition.split(':')
-
-        def branchName = parts[0]
-        def goals = 'clean package'
+        
+        def branchName = branchDefinition.branchName
+        def goals = branchDefinition.goals
         
         if (parts.length == 2){
             goals = parts[1]
