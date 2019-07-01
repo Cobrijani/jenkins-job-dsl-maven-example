@@ -26,7 +26,6 @@ class MavenCiBuilder {
                 daysToKeep = this.daysToKeep
             }
             wrappers {
-                buildName("${POM_VERSION}-${GIT_COMMIT}")
                 mavenRelease {
                     releaseGoals('-Dresume=false release:prepare release:perform')
                     dryRunGoals('-Dresume=false -DdryRun=true release:prepare')
