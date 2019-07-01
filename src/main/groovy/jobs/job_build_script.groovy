@@ -22,7 +22,7 @@ def createBuildJobs(projectConfig, basePath, branchName) {
 
 def createDeployJobs(projectConfig, basePath, branchName){
     new ShellCiBuilder(
-        jobName: "${basePath}/${projectConfig.projectName}-script-${branchName}",
+        jobName: "${basePath}/${projectConfig.projectName}-deploy-${branchName}",
         description: 'Deploy ${projectConfig.projectName}',
         numToKeep: 10,
         daysToKeep: 90,
