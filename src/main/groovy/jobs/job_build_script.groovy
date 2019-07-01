@@ -55,7 +55,7 @@ projectConfigList.each { projectConfig ->
             projectConfig, branchPath, branchName)
     }
 
-    projectconfig.gitConfig.branchesToDeploy.each { branchName ->
+    projectConfig.gitConfig.branchesToDeploy.each { branchName ->
         def branchPath = "${projectBasePath}/${branchName}"
         folder(branchPath) {
             description 'All jobs for the pipeline'
