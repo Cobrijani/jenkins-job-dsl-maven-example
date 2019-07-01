@@ -6,7 +6,7 @@ import utilities.job.builder.ShellCiBuilder
 final YAML_FILE_CONFIG_PATH = "/var/jenkins_home/job_dsl_script/jenkins_swarm.yaml"
 final BASE_PATH = "pipelines"
 
-def createBuildJobs(projectConfig, basePath, branchName) {
+def createBuildJobs(projectConfig, basePath, branchName, goals) {
     new MavenCiBuilder (
         jobName: "${basePath}/${projectConfig.projectName}-build-${branchName}",
         description: 'Build ${projectConfig.projectName}',
@@ -14,7 +14,8 @@ def createBuildJobs(projectConfig, basePath, branchName) {
         daysToKeep: 90,
         scmGitUrl: projectConfig.gitConfig.url,
         branchName: branchName,
-        credentialKeyId: projectConfig.gitConfig.credentialKeyId
+        credentialKeyId: projectConfig.gitConfig.credentialKeyId,
+        goals: goals
     ).build(this)
     
     
@@ -46,13 +47,22 @@ projectConfigList.each { projectConfig ->
     folder(projectBasePath) {
         description 'All branch pipelines'
     }
-    projectConfig.gitConfig.branchesToBuild.each { branchName ->
+    projectConfig.gitConfig.branchesToBuild.each { branchDefinition ->
+        def parts = branchDefinition.split(':')
+
+        def branchName = parts[0]
+        def goals = 'clean package'
+        
+        if (parts.length == 2){
+            goals = parts[1]
+        }
+
         def branchPath = "${projectBasePath}/${branchName}"
         folder(branchPath) {
             description 'All jobs for the pipeline'
         }
         def buildJobNames = createBuildJobs(
-            projectConfig, branchPath, branchName)
+            projectConfig, branchPath, branchName, goals)
     }
 
     projectConfig.gitConfig.branchesToDeploy.each { branchName ->
