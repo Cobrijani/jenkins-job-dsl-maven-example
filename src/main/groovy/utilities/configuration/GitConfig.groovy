@@ -22,15 +22,16 @@ class GitConfig {
                 url = it[URL_PROPERTY_KEY]
             } else if (it[BRANCHES_TO_BUILD_PROPERTY_KEY]) {
                 it[BRANCHES_TO_BUILD_PROPERTY_KEY].each { build ->
-                    println "Branches to build: ${build}"
-                    if(build instanceof String){
+                     if (build instanceof LinkedHashMap){
+                        build.each { entry ->
+                            branchesToBuild
+                            .add(new BranchBuild(branchName: entry.key, 
+                            goals: entry.value))
+                        }
+                    }else{
                         branchesToBuild
                             .add(new BranchBuild(branchName: build,
                                 goals: "clean package"))
-                    }else{
-                        branchesToBuild
-                            .add(new BranchBuild(branchName: build.key, 
-                            goals: build.value))
                     }
                 }
             } else if (it[CREDENTIAL_KEY_ID_PROPERTY_KEY]) {

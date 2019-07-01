@@ -21,6 +21,7 @@ class MavenCiBuilderTest {
     String scmGitUrl = "git@github.com:maikwolf/jenkins-job-dsl-maven-example.git"
     String branchName = "master"
     String credentialKeyId = "1321ndsajd13123"
+    String goals = "clean package"
     
     @Before
     public void setUp() {
@@ -31,7 +32,8 @@ class MavenCiBuilderTest {
             daysToKeep: this.daysToKeep,
             scmGitUrl: this.scmGitUrl,
             branchName: this.branchName,
-            credentialKeyId: this.credentialKeyId
+            credentialKeyId: this.credentialKeyId,
+            goals: this.goals
         )
     }
     
