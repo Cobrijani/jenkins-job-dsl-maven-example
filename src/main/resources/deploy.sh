@@ -9,6 +9,8 @@ if [ -f "$FILE" ]; then
     docker-compose -f $FILE rm -f 
     docker-compose up -d --force-recreate
     echo "Complete finished"
+else
+    echo "Deployment yaml not found"
 fi
 
 
