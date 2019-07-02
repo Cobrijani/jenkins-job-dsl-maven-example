@@ -27,8 +27,7 @@ def createDeployJobs(projectConfig, basePath, branchName){
         description: "Deploy ${projectConfig.projectName}",
         numToKeep: 10,
         daysToKeep: 90,
-        scriptsToRun: ["${WORKSPACE}/src/main/resources/test1.sh"
-            , "${WORKSPACE}/src/main/resources/test2.sh"],
+        scriptsToRun: ["${WORKSPACE}/src/main/resources/deploy.sh"],
         scmGitUrl: projectConfig.gitConfig.url,
         branchName: branchName,
         credentialKeyId: projectConfig.gitConfig.credentialKeyId
