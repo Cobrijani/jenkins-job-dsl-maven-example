@@ -21,6 +21,12 @@ class MavenCiBuilder {
     Job build(DslFactory dslFactory) {
         dslFactory.mavenJob(jobName) {
             description(this.description)
+            triggers {
+                cron('0 0 4 1/1 * ? *')
+            }
+            publishers {
+                archiveJunit('**/target/surefire-reports/*.xml')
+            }
             logRotator {
                 numToKeep = this.numToKeep
                 daysToKeep = this.daysToKeep
