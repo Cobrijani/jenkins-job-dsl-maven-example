@@ -1,6 +1,6 @@
 #!/bin/sh
 
-FILE=${workspace}/src/main/docker/deploy.yml
+FILE=src/main/docker/deploy.yml
 
 
 if [ -f "$FILE" ]; then
