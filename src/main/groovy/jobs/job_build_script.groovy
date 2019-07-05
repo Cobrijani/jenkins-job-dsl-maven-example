@@ -2,9 +2,12 @@
 import utilities.configuration.ReadYaml
 import utilities.job.builder.MavenCiBuilder
 import utilities.job.builder.ShellCiBuilder
+import javaposse.jobdsl.dsl.DslFactory
 
 final YAML_FILE_CONFIG_PATH = "/var/jenkins_home/job_dsl_script/jenkins_swarm.yaml"
 final BASE_PATH = "pipelines"
+
+DslFactory factory = this
 
 def createBuildJobs(projectConfig, basePath, branchName, goals) {
     new MavenCiBuilder (
@@ -68,5 +71,79 @@ projectConfigList.each { projectConfig ->
             projectConfig, branchPath, branchName)
     }
 }
+
+factory.listView('Build master') {
+    description('Build master of the projects')
+    filterBuildQueue()
+    filterExecutors()
+    jobs {
+        regex(/.*-build-master/)
+    }
+    columns {
+        status()
+        weather()
+        name()
+        lastSuccess()
+        lastFailure()
+        lastDuration()
+        buildButton()
+    }
+}
+
+factory.listView('Build staging') {
+    description('Build staging of the projects')
+    filterBuildQueue()
+    filterExecutors()
+    jobs {
+        regex(/.*-build-staging/)
+    }
+    columns {
+        status()
+        weather()
+        name()
+        lastSuccess()
+        lastFailure()
+        lastDuration()
+        buildButton()
+    }
+}
+
+factory.listView('Deploy master') {
+    description('Deploy master of the projects')
+    filterBuildQueue()
+    filterExecutors()
+    jobs {
+        regex(/.*-deploy-master/)
+    }
+    columns {
+        status()
+        weather()
+        name()
+        lastSuccess()
+        lastFailure()
+        lastDuration()
+        buildButton()
+    }
+}
+
+factory.listView('Deploy staging') {
+    description('Deploy staging of the projects')
+    filterBuildQueue()
+    filterExecutors()
+    jobs {
+        regex(/.*-deploy-staging/)
+    }
+    columns {
+        status()
+        weather()
+        name()
+        lastSuccess()
+        lastFailure()
+        lastDuration()
+        buildButton()
+    }
+}
+
+
 
 
