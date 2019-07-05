@@ -2,6 +2,7 @@
 import utilities.configuration.ReadYaml
 import utilities.job.builder.MavenCiBuilder
 import utilities.job.builder.ShellCiBuilder
+import javaposse.jobdsl.dsl.DslFactory
 
 final YAML_FILE_CONFIG_PATH = "/var/jenkins_home/job_dsl_script/jenkins_swarm.yaml"
 final BASE_PATH = "pipelines"
@@ -35,8 +36,8 @@ def createDeployJobs(projectConfig, basePath, branchName){
     ).build(this)
 }
 
-def createProjectListView(name, desc, regular){
-    this.listView(name) {
+def createProjectListView( name,  desc, regular, DslFactory factory){
+    factory.listView(name) {
         description(desc)
         filterBuildQueue()
         filterExecutors()
@@ -91,7 +92,7 @@ projectConfigList.each { projectConfig ->
     }
 }
 
-createProjectListView('Build master', 'Build master of the projects',/.*-build-master/)
-createProjectListView('Build staging', 'Build staging of the projects',/.*-build-staging/)
-createProjectListView('Deploy master', 'Deploy master of the projects',/.*-deploy-master/)
-createProjectListView('Deploy staging', 'Deploy staging of the projects',/.*-deploy-staging/)
+createProjectListView('Build master', 'Build master of the projects',/.*-build-master/,this)
+createProjectListView('Build staging', 'Build staging of the projects',/.*-build-staging/,this)
+createProjectListView('Deploy master', 'Deploy master of the projects',/.*-deploy-master/,this)
+createProjectListView('Deploy staging', 'Deploy staging of the projects',/.*-deploy-staging/,this)
