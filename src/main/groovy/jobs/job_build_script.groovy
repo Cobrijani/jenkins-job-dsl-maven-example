@@ -2,12 +2,10 @@
 import utilities.configuration.ReadYaml
 import utilities.job.builder.MavenCiBuilder
 import utilities.job.builder.ShellCiBuilder
-import javaposse.jobdsl.dsl.DslFactory
 
 final YAML_FILE_CONFIG_PATH = "/var/jenkins_home/job_dsl_script/jenkins_swarm.yaml"
 final BASE_PATH = "pipelines"
 
-DslFactory factory = this
 
 def createBuildJobs(projectConfig, basePath, branchName, goals) {
     new MavenCiBuilder (
@@ -38,7 +36,7 @@ def createDeployJobs(projectConfig, basePath, branchName){
 }
 
 def createProjectListView(name, desc, regular){
-    factory.listView(name) {
+    this.listView(name) {
         description(desc)
         filterBuildQueue()
         filterExecutors()
