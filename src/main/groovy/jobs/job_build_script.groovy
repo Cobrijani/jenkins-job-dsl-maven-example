@@ -36,8 +36,8 @@ def createDeployJobs(projectConfig, basePath, branchName){
     ).build(this)
 }
 
-def createProjectListView( name,  desc, regular, DslFactory factory){
-    factory.listView(name) {
+def createProjectListView(title, desc, regular, DslFactory factory){
+    factory.listView(title) {
         description(desc)
         filterBuildQueue()
         filterExecutors()
