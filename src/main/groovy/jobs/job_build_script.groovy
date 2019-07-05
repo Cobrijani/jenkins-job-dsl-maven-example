@@ -37,6 +37,27 @@ def createDeployJobs(projectConfig, basePath, branchName){
     ).build(this)
 }
 
+def createProjectListView(name, desc, regular){
+    factory.listView(name) {
+        description(desc)
+        filterBuildQueue()
+        filterExecutors()
+        recurse()
+        jobs {
+            regex(regular)
+        }
+        columns {
+            status()
+            weather()
+            name()
+            lastSuccess()
+            lastFailure()
+            lastDuration()
+            buildButton()
+        }
+    }
+}
+
 ReadYaml readYaml = new ReadYaml()
 def projectConfigList = readYaml.readJenkinsYaml(YAML_FILE_CONFIG_PATH)
 
@@ -72,78 +93,7 @@ projectConfigList.each { projectConfig ->
     }
 }
 
-factory.listView('Build master') {
-    description('Build master of the projects')
-    filterBuildQueue()
-    filterExecutors()
-    jobs {
-        regex(/.*-build-master/)
-    }
-    columns {
-        status()
-        weather()
-        name()
-        lastSuccess()
-        lastFailure()
-        lastDuration()
-        buildButton()
-    }
-}
-
-factory.listView('Build staging') {
-    description('Build staging of the projects')
-    filterBuildQueue()
-    filterExecutors()
-    jobs {
-        regex(/.*-build-staging/)
-    }
-    columns {
-        status()
-        weather()
-        name()
-        lastSuccess()
-        lastFailure()
-        lastDuration()
-        buildButton()
-    }
-}
-
-factory.listView('Deploy master') {
-    description('Deploy master of the projects')
-    filterBuildQueue()
-    filterExecutors()
-    jobs {
-        regex(/.*-deploy-master/)
-    }
-    columns {
-        status()
-        weather()
-        name()
-        lastSuccess()
-        lastFailure()
-        lastDuration()
-        buildButton()
-    }
-}
-
-factory.listView('Deploy staging') {
-    description('Deploy staging of the projects')
-    filterBuildQueue()
-    filterExecutors()
-    jobs {
-        regex(/.*-deploy-staging/)
-    }
-    columns {
-        status()
-        weather()
-        name()
-        lastSuccess()
-        lastFailure()
-        lastDuration()
-        buildButton()
-    }
-}
-
-
-
-
+createProjectListView('Build master', 'Build master of the projects',/.*-build-master/)
+createProjectListView('Build staging', 'Build staging of the projects',/.*-build-staging/)
+createProjectListView('Deploy master', 'Deploy master of the projects',/.*-deploy-master/)
+createProjectListView('Deploy staging', 'Deploy staging of the projects',/.*-deploy-staging/)
