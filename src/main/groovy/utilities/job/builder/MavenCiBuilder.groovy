@@ -52,13 +52,13 @@ class MavenCiBuilder {
             blockOnDownstreamProjects()
             goals(this.goals)
 
-             environmentVariables {
-                env('SHORT_COMMIT', '`git rev-parse --short HEAD`')
-                keepBuildVariables(true)
-            }
 
             preBuildSteps {
-                shell("export SHORT_COMMIT=`git rev-parse --short HEAD`")
+                shell("echo SHORT_COMMIT=`git rev-parse --short HEAD` > env.properties")
+                environmentVariables {
+                    propertiesFile('env.properties')
+                    keepBuildVariables(true)
+                }
             }
         }
     }
