@@ -57,7 +57,6 @@ class MavenCiBuilder {
                 shell("echo SHORT_COMMIT=`git rev-parse --short HEAD` > env.properties")
                 environmentVariables {
                     propertiesFile('env.properties')
-                    keepBuildVariables(true)
                 }
             }
         }
