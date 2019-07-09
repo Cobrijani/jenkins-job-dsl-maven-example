@@ -53,7 +53,7 @@ class MavenCiBuilder {
             goals(this.goals)
 
             preBuildSteps {
-                shell("export SHORT_COMMIT=$(git rev-parse --short HEAD)")
+                shell("export SHORT_COMMIT=`git rev-parse --short HEAD`")
             }
 
             postBuildSteps('SUCCESS') {
