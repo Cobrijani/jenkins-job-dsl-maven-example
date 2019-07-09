@@ -21,12 +21,7 @@ class MavenCiBuilder {
     Job build(DslFactory dslFactory) {
         dslFactory.mavenJob(jobName) {
             description(this.description)
-            triggers {
-                cron('0 0 4 1/1 * ? *')
-            }
-            publishers {
-                archiveJunit('**/target/surefire-reports/*.xml')
-            }
+            
             logRotator {
                 numToKeep = this.numToKeep
                 daysToKeep = this.daysToKeep
@@ -56,6 +51,14 @@ class MavenCiBuilder {
             }
             blockOnDownstreamProjects()
             goals(this.goals)
+
+            preBuildSteps {
+                shell("export SHORT_COMMIT=$(git rev-parse --short HEAD)")
+            }
+
+            postBuildSteps('SUCCESS') {
+                shell("printenv SHORT_COMMIT")
+            }   
         }
     }
 }
