@@ -2,6 +2,7 @@ package utilities.job.builder
 
 import javaposse.jobdsl.dsl.DslFactory
 import javaposse.jobdsl.dsl.Job
+import hudson.model.*
 
 /**
  *
@@ -62,11 +63,29 @@ class MavenCiBuilder {
             }
 
             publishers {
+                groovyPostBuild("""
+                    String regex = '.*\\[INFO\\] Building .+ (.+)';
+                    def matcher = manager.getLogMatcher(regex);
+                    def version = null;
+                    if (matcher == null) {
+                        version = null;
+                    } else {
+                        version =  matcher.group(1);
+                    }
+
+                    println version
+
+                    def build = Thread.currentThread().executable
+                    def pa = new ParametersAction([
+                    new StringParameterValue("POM_VERSION", version)
+                    ])
+                    build.addAction(pa)
+                """)
                 downstreamParameterized {
                     trigger(this.deployJob) {
                         condition('SUCCESS')
                         parameters {
-                            predefinedProp('TAG', '${DOCKER_TAG}')
+                            predefinedProp('TAG', 'v${POM_VERSION}.${DOCKER_TAG}')
                         }
                     }
                 }
