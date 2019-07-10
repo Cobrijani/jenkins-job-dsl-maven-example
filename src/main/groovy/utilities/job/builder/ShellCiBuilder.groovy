@@ -26,12 +26,6 @@ class ShellCiBuilder {
                 stringParam('TAG', 'latest', 'Tag used to deploying')
             }
 
-            preBuildSteps {
-                environmentVariables {
-                    env('TAG', '$TAG')
-                }
-            }
-
             logRotator {
                 numToKeep = this.numToKeep
                 daysToKeep = this.daysToKeep
@@ -48,6 +42,9 @@ class ShellCiBuilder {
             }
             blockOnDownstreamProjects()
             steps {
+                environmentVariables {
+                    env('TAG', '$TAG')
+                }
                 scriptsToRun.each { script ->
                     shell new File(script).getText('UTF-8')
                 }
