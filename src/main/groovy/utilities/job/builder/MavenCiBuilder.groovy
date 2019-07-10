@@ -64,7 +64,7 @@ class MavenCiBuilder {
 
             publishers {
                 groovyPostBuild("""
-def pattern = '.*\\[INFO\\] Building .+ (.+)';
+def pattern = '.*\\\\[INFO\\\\] Building .+ (.+)';
 def matcher = manager.getLogMatcher(pattern);
 def version = null;
 if (matcher == null) {
