@@ -64,23 +64,23 @@ class MavenCiBuilder {
 
             publishers {
                 groovyPostBuild("""
-                    String regex = '.*\\[INFO\\] Building .+ (.+)';
-                    def matcher = manager.getLogMatcher(regex);
-                    def version = null;
-                    if (matcher == null) {
-                        version = null;
-                    } else {
-                        version =  matcher.group(1);
-                    }
+def pattern = '.*\\[INFO\\] Building .+ (.+)';
+def matcher = manager.getLogMatcher(pattern);
+def version = null;
+if (matcher == null) {
+    version = null;
+} else {
+    version =  matcher.group(1);
+}
 
-                    println version
+println version
 
-                    def build = Thread.currentThread().executable
-                    def pa = new ParametersAction([
-                    new StringParameterValue("POM_VERSION", version)
-                    ])
-                    build.addAction(pa)
-                """)
+def build = Thread.currentThread().executable
+def pa = new ParametersAction([
+new StringParameterValue("POM_VERSION", version)
+])
+build.addAction(pa)
+""")
                 downstreamParameterized {
                     trigger(this.deployJob) {
                         condition('SUCCESS')
