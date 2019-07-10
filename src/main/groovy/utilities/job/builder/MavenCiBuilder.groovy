@@ -51,7 +51,7 @@ class MavenCiBuilder {
                 }
             }
             blockOnDownstreamProjects()
-            goals(this.goals)
+            goals(this.goals + '-DDOCKER_TAG=${DOCKER_TAG}')
 
 
             preBuildSteps {
