@@ -21,6 +21,17 @@ class ShellCiBuilder {
     Job build(DslFactory dslFactory) {
         dslFactory.freeStyleJob(jobName) {
             description(this.description)
+
+            parameters {
+                stringParam('TAG', 'latest', 'Tag used to deploying')
+            }
+
+            preBuildSteps {
+                environmentVariables {
+                    env('TAG', '$TAG')
+                }
+            }
+
             logRotator {
                 numToKeep = this.numToKeep
                 daysToKeep = this.daysToKeep

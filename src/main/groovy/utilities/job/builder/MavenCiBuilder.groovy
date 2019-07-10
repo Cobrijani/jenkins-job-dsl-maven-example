@@ -17,6 +17,7 @@ class MavenCiBuilder {
     String branchName
     String credentialKeyId
     String goals
+    String deployJob
     
     Job build(DslFactory dslFactory) {
         dslFactory.mavenJob(jobName) {
@@ -54,9 +55,20 @@ class MavenCiBuilder {
 
 
             preBuildSteps {
-                shell("echo SHORT_COMMIT=`git rev-parse --short HEAD` > env.properties")
+                shell("echo DOCKER_TAG=`git rev-parse --short HEAD` > env.properties")
                 environmentVariables {
                     propertiesFile('env.properties')
+                }
+            }
+
+            publishers {
+                downstreamParameterized {
+                    trigger(this.deployJob) {
+                        condition('SUCCESS')
+                        parameters {
+                            predefinedProp('TAG', '${DOCKER_TAG}')
+                        }
+                    }
                 }
             }
         }

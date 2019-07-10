@@ -17,10 +17,9 @@ def createBuildJobs(projectConfig, basePath, branchName, goals) {
         scmGitUrl: projectConfig.gitConfig.url,
         branchName: branchName,
         credentialKeyId: projectConfig.gitConfig.credentialKeyId,
-        goals: goals
+        goals: goals,
+        deployJob: "${basePath}/${projectConfig.projectName}-deploy-${branchName}"
     ).build(this)
-    
-    
 }
 
 def createDeployJobs(projectConfig, basePath, branchName){
