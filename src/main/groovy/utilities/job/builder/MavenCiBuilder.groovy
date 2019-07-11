@@ -72,6 +72,7 @@ fi
             
             postBuildSteps {
                 shell("""
+FILE=src/main/docker/test.yml
 if [ -f "$FILE" ]; then
     docker-compose -f $FILE stop
     docker-compose -f $FILE rm -f
