@@ -80,8 +80,8 @@ fi
         
 
             downstreamParameterized {
-                    trigger(this.deployJob) {
-                        condition('SUCCESS')
+                trigger(this.deployJob) {
+                    condition('SUCCESS')
                         parameters {
                             predefinedProp('TAG', 'v${POM_VERSION}.${DOCKER_TAG}')
                         }
