@@ -88,6 +88,5 @@ class MavenCiBuilder {
             }  //postBuildSteps
     
             }// dslFactory.mavenJob(jobName)    
-        }
-    }//Job build(DslFactory dslFactory)
-}//class MavenCiBuilder
+        }//Job build(DslFactory dslFactory)
+    }//class MavenCiBuilder
