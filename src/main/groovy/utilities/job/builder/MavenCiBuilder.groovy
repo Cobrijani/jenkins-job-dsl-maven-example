@@ -57,31 +57,30 @@ class MavenCiBuilder {
 
             preBuildSteps {
                 shell("echo DOCKER_TAG=`git rev-parse --short HEAD` > env.properties")
+                shell("""
+FILE=src/main/docker/test.yml
+if [ -f "$FILE" ]; then
+    docker-compose -f $FILE stop
+    docker-compose -f $FILE rm -f
+    docker-compose -f $FILE up -d
+fi
+
+                """)
                 environmentVariables {
                     propertiesFile('env.properties')
                 }
             }
+            
+            postBuildSteps {
+                shell("""
+if [ -f "$FILE" ]; then
+    docker-compose -f $FILE stop
+    docker-compose -f $FILE rm -f
+fi
+                """)
+            }
 
-            publishers {
-                groovyPostBuild("""
-def pattern = '.*\\\\[INFO\\\\] Building .+ (.+)';
-def matcher = manager.getLogMatcher(pattern);
-def version = null;
-if (matcher == null) {
-    version = null;
-} else {
-    version =  matcher.group(1);
-}
-
-println version
-
-def build = Thread.currentThread().executable
-def pa = new ParametersAction([
-new StringParameterValue("POM_VERSION", version)
-])
-build.addAction(pa)
-""")
-                downstreamParameterized {
+            downstreamParameterized {
                     trigger(this.deployJob) {
                         condition('SUCCESS')
                         parameters {
