@@ -71,11 +71,11 @@ class MavenCiBuilder {
 
             downstreamParameterized {
                 trigger(this.deployJob) {
-                    condition('SUCCESS'){
-                        parameters {
-                            predefinedProp('TAG', 'v${POM_VERSION}.${DOCKER_TAG}')
-                        }
+                    condition('SUCCESS')
+                    parameters {
+                        predefinedProp('TAG', 'v${POM_VERSION}.${DOCKER_TAG}')
                     }
+                    
                 }//trigger(this.deployJob)
             }//downstreamParameterized
             postBuildSteps {
