@@ -54,8 +54,7 @@ class MavenCiBuilder {
             blockOnDownstreamProjects()
             goals(this.goals + ' -Drevision=${DOCKER_TAG}')
 
-
-            preBuildSteps {
+                preBuildSteps {
                 shell("echo DOCKER_TAG=`git rev-parse --short HEAD` > env.properties")
                 shell("""
 FILE=src/main/docker/test.yml
@@ -79,6 +78,7 @@ if [ -f "$FILE" ]; then
 fi
                 """)
             }
+        
 
             downstreamParameterized {
                     trigger(this.deployJob) {
@@ -90,6 +90,6 @@ fi
                 }
             }
         }
-    }
 }
+
 
