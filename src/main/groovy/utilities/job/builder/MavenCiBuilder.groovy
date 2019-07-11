@@ -57,11 +57,10 @@ class MavenCiBuilder {
                 preBuildSteps {
                 shell("echo DOCKER_TAG=`git rev-parse --short HEAD` > env.properties")
                 shell("""
-FILE=src/main/docker/test.yml
-if [ -f "$FILE" ]; then
-    docker-compose -f $FILE stop
-    docker-compose -f $FILE rm -f
-    docker-compose -f $FILE up -d
+if [ -f "src/main/docker/test.yml" ]; then
+    docker-compose -f src/main/docker/test.yml stop
+    docker-compose -f src/main/docker/test.yml rm -f
+    docker-compose -f src/main/docker/test.yml up -d
 fi
 
                 """)
@@ -72,10 +71,9 @@ fi
             
             postBuildSteps {
                 shell("""
-FILE=src/main/docker/test.yml
-if [ -f "$FILE" ]; then
-    docker-compose -f $FILE stop
-    docker-compose -f $FILE rm -f
+if [ -f "src/main/docker/test.yml" ]; then
+    docker-compose -f src/main/docker/test.yml stop
+    docker-compose -f src/main/docker/test.yml rm -f
 fi
                 """)
             }
