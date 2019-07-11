@@ -51,33 +51,23 @@ class MavenCiBuilder {
                     branch(this.branchName)
                 }
             }
-            blockOnDownstreamProjects()
-            goals(this.goals + ' -Drevision=${DOCKER_TAG}')
 
-                preBuildSteps {
+            preBuildSteps {
                 shell("echo DOCKER_TAG=`git rev-parse --short HEAD` > env.properties")
                 shell("""
-if [ -f "src/main/docker/test.yml" ]; then
-    docker-compose -f src/main/docker/test.yml stop
-    docker-compose -f src/main/docker/test.yml rm -f
-    docker-compose -f src/main/docker/test.yml up -d
-fi
-
+                    if [ -f "src/main/docker/test.yml" ]; then
+                        docker-compose -f src/main/docker/test.yml stop
+                        docker-compose -f src/main/docker/test.yml rm -f
+                        docker-compose -f src/main/docker/test.yml up -d
+                    fi
                 """)
                 environmentVariables {
                     propertiesFile('env.properties')
                 }
             }
-            
-            postBuildSteps {
-                shell("""
-if [ -f "src/main/docker/test.yml" ]; then
-    docker-compose -f src/main/docker/test.yml stop
-    docker-compose -f src/main/docker/test.yml rm -f
-fi
-                """)
-            }
-        
+
+            blockOnDownstreamProjects()
+            goals(this.goals + ' -Drevision=${DOCKER_TAG}')
 
             downstreamParameterized {
                 trigger(this.deployJob) {
@@ -86,9 +76,18 @@ fi
                             predefinedProp('TAG', 'v${POM_VERSION}.${DOCKER_TAG}')
                         }
                     }
-                }
             }
-        }
+            postBuildSteps {
+                shell("""
+                    if [ -f "src/main/docker/test.yml" ]; then
+                        docker-compose -f src/main/docker/test.yml stop
+                        docker-compose -f src/main/docker/test.yml rm -f
+                    fi
+                """)
+            }  
+    
+        }// dslFactory.mavenJob(jobName)    
+    }
 }
 
 
