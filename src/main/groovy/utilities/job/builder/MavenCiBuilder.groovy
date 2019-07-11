@@ -71,12 +71,12 @@ class MavenCiBuilder {
 
             downstreamParameterized {
                 trigger(this.deployJob) {
-                    condition('SUCCESS')
+                    condition('SUCCESS'){
                         parameters {
                             predefinedProp('TAG', 'v${POM_VERSION}.${DOCKER_TAG}')
                         }
                     }
-            }
+            }//downstreamParameterized
             postBuildSteps {
                 shell("""
                     if [ -f "src/main/docker/test.yml" ]; then
@@ -84,7 +84,7 @@ class MavenCiBuilder {
                         docker-compose -f src/main/docker/test.yml rm -f
                     fi
                 """)
-            }  
+            }  //postBuildSteps
     
         }// dslFactory.mavenJob(jobName)    
     }
