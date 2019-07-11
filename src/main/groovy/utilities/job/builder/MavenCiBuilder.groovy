@@ -27,7 +27,7 @@ class MavenCiBuilder {
             logRotator {
                 numToKeep = this.numToKeep
                 daysToKeep = this.daysToKeep
-            }
+            } //logRotator
             wrappers {
                 if(this.branchName == "master"){
                     mavenRelease {
@@ -39,7 +39,7 @@ class MavenCiBuilder {
                         numberOfReleaseBuildsToKeep(10)
                     }
                 }
-            }
+            }//wrappers
             
             scm {
                 git {
@@ -50,7 +50,7 @@ class MavenCiBuilder {
                     }
                     branch(this.branchName)
                 }
-            }
+            }//scm
 
             preBuildSteps {
                 shell("echo DOCKER_TAG=`git rev-parse --short HEAD` > env.properties")
@@ -64,7 +64,7 @@ class MavenCiBuilder {
                 environmentVariables {
                     propertiesFile('env.properties')
                 }
-            }
+            }//preBuildSteps
 
             blockOnDownstreamProjects()
             goals(this.goals + ' -Drevision=${DOCKER_TAG}')
@@ -76,6 +76,7 @@ class MavenCiBuilder {
                             predefinedProp('TAG', 'v${POM_VERSION}.${DOCKER_TAG}')
                         }
                     }
+                }//trigger(this.deployJob)
             }//downstreamParameterized
             postBuildSteps {
                 shell("""
@@ -88,5 +89,5 @@ class MavenCiBuilder {
     
             }// dslFactory.mavenJob(jobName)    
         }
-    }
-}
+    }//Job build(DslFactory dslFactory)
+}//class MavenCiBuilder
