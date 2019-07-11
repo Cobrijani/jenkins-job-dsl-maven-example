@@ -69,15 +69,17 @@ class MavenCiBuilder {
             blockOnDownstreamProjects()
             goals(this.goals + ' -Drevision=${DOCKER_TAG}')
 
-            downstreamParameterized {
-                trigger(this.deployJob) {
-                    condition('SUCCESS')
-                    parameters {
-                        predefinedProp('TAG', 'v${POM_VERSION}.${DOCKER_TAG}')
-                    }
-                    
-                }//trigger(this.deployJob)
-            }//downstreamParameterized
+            publishers {
+                downstreamParameterized {
+                    trigger(this.deployJob) {
+                        condition('SUCCESS')
+                        parameters {
+                            predefinedProp('TAG', 'v${POM_VERSION}.${DOCKER_TAG}')
+                        }
+                    }//trigger(this.deployJob)
+                }//downstreamParameterized
+            }//publishers
+            
             postBuildSteps {
                 shell("""
                     if [ -f "src/main/docker/test.yml" ]; then
@@ -85,7 +87,7 @@ class MavenCiBuilder {
                         docker-compose -f src/main/docker/test.yml rm -f
                     fi
                 """)
-            }  //postBuildSteps
+            }//postBuildSteps
     
             }// dslFactory.mavenJob(jobName)    
         }//Job build(DslFactory dslFactory)
