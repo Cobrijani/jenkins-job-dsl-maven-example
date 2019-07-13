@@ -26,6 +26,10 @@ class ShellCiBuilder {
                 stringParam('TAG', 'latest', 'Tag used to deploying')
             }
 
+            wrappers {
+                buildName('${TAG}')
+            }
+
             logRotator {
                 numToKeep = this.numToKeep
                 daysToKeep = this.daysToKeep
