@@ -38,6 +38,7 @@ class MavenCiBuilder {
                         selectScmCredentials()
                         numberOfReleaseBuildsToKeep(10)
                     }
+                    buildName('#${BUILD_NUMBER} on ${ENV,var="BRANCH"}')
                 }
             }//wrappers
             
@@ -87,6 +88,7 @@ class MavenCiBuilder {
                         docker-compose -f src/main/docker/test.yml rm -f
                     fi
                 """)
+                 buildName('${POM_VERSION}.${DOCKER_TAG}')
             }//postBuildSteps
     
             }// dslFactory.mavenJob(jobName)    
